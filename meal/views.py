@@ -2,87 +2,96 @@ from rest_framework import generics
 from collections import Counter
 from .models import Meal, Order, Delivery
 from employee.models import Employee
-from .serializer import MealSerializer, OrderSerializer, DeliverySerializer, OrderSerializerReadOnly
+from .serializer import MealSerializer, OrderSerializer, DeliverySerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.permissions import IsAdminUser
 from rest_framework.authentication import TokenAuthentication, BasicAuthentication
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework import viewsets, mixins
+from .permissions import CustomMealPermission
+from .authentications import CustomMealAuthentication
 
-class MealCreateView(generics.CreateAPIView):
+class MealViewSet(viewsets.GenericViewSet,mixins.CreateModelMixin,
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin):
     """
     General ViewSet Description:
     
-    API view for creating a Meal.
-    Supports POST method.
+    API view for creating, listing, retrieving, and updating Meals.
 
-    post: allow the addition of a new meal
+    create: Allow the addition of a new meal.
+    list: List all the meals in the system 
+    retrieve: Retrieve a specific meal.
+    update: Update attributes of a meal.
 
-    only accessible to admin user with basic authentication
     """
 
-    permission_classes = [IsAdminUser]
+    queryset = Meal.objects.all()
+    serializer_class = MealSerializer
+    #permission_classes = [CustomMealPermission]
     authentication_classes = [BasicAuthentication]
-    queryset = Meal.objects.all()
-    serializer_class = MealSerializer
-
-from rest_framework_simplejwt.authentication import JWTAuthentication
-
-# class CustJWTAuthentication(JWTAuthentication):
-#     user_class = Employee
-class MealListView(generics.ListAPIView):
-    """
-    General ViewSet Description:
-
-    API view for listing Meals.
-
-    get: list all the meals in the system
-
-    allows access only with the help of token authentication
-    """
-    authentication_classes = [JWTAuthentication]
-    permission_classes =[IsAuthenticated]
-    queryset = Meal.objects.all()
-    serializer_class = MealSerializer
-
-class MealRetrieveView(generics.RetrieveAPIView):
-    """
-    General ViewSet Description:
-
-    API view for retrieving a Meal.
-    get: allows one meal to be retirved
-    """
-    queryset = Meal.objects.all()
-    serializer_class = MealSerializer
-
-class MealUpdateView(generics.UpdateAPIView):
-    """
-    General ViewSet Description:
-
-    API view for updating a Meal.
     
-    patch: update attribute of a meal
 
-    only accessible to admin user with basic authentication
-    """
-    permission_classes = [IsAdminUser]
-    authentication_classes = [BasicAuthentication]
-    queryset = Meal.objects.all()
-    serializer_class = MealSerializer
+    def get_permissions(self):
+        if self.action == 'create':
+            permission_classes = [IsAdminUser]
+        elif self.action in ['list', 'retrieve']:
+            permission_classes = [IsAuthenticated]
+        elif self.action == 'update':
+            permission_classes = [IsAdminUser]
+        else:
+            permission_classes = []
+        return [permission() for permission in permission_classes]
 
-class OrderListCreateView(generics.ListCreateAPIView):
+    # def initial(self, request, *args, **kwargs):
+    #     # Set self.action based on the request method
+    #     if request.method == 'POST':
+    #         self.action = 'create'
+    #     elif request.method == 'GET':
+    #         if 'pk' in kwargs:
+    #             self.action = 'retrieve'
+    #         else:
+    #             self.action = 'list'
+    #     elif request.method == 'PATCH' or request.method == 'PUT':
+    #         self.action = 'update'
+    #     else:
+    #         self.action = None
+    #     super().initial(request, *args, **kwargs)
+    
+
+    
+    #permission_classes = self.get_permissions()
+
+    # def get_authenticators(self):
+    #     print("33333333333333333333333333333333333333333")
+    #     if self.action == 'create':
+    #         authentication_classes = [BasicAuthentication]
+    #     elif self.action in ['list', 'retrieve', 'update']:
+    #         authentication_classes = [JWTAuthentication]
+    #     else:
+    #         authentication_classes = []
+    #     return [authentication() for authentication in authentication_classes]
+
+class OrderViewSet(viewsets.ModelViewSet):
     """
     General ViewSet Description:
 
-    API view for creating a new Order or listing all orders
+    API view for creating, retrieving, updating, and deleting Orders.
 
-    get: list all orders in system
-    post: add a new order
+    create: Creates a new Order.
+    list: Lists all orders in the system.
+    retrieve: Retrieves a specific order.
+    partial_update: Partially updates order data (completed or delFlag).
+    destroy: Deletes an order.
+
     """
     queryset = Order.objects.all()
+    http_method_names = ["patch","get","delete","post"]
     serializer_class = OrderSerializer
-
+    
     def create(self, request, *args, **kwargs):
         """
         create: Creates a new Order.
@@ -143,24 +152,6 @@ class OrderListCreateView(generics.ListCreateAPIView):
         data['price'] = sum
         return Response(data, status=status.HTTP_201_CREATED)
     
-class OrderDetailView(generics.RetrieveUpdateDestroyAPIView):
-    """
-    General ViewSet Description:
-
-    API view for retrieving, updating, and deleting an Order.
-    Supports GET, PATCH, and DELETE methods.
-
-    retrieve: Retrieve data for the order with details on the meals.
-    partial update: Partially update order data (completed or delFlag).
-    delete: Delete order data.
-
-    Only accessible to the original author or admin users with basic authentication.
-    """
-
-    queryset = Order.objects.all()
-    serializer_class = OrderSerializerReadOnly
-    http_method_names = ["patch","get","delete"]
-
     def destroy(self, request, pk, *args, **kwargs):
         """
         destroy: Deletes an Order.
@@ -216,13 +207,16 @@ class OrderDetailView(generics.RetrieveUpdateDestroyAPIView):
                 order_obj.delFlag = 'True'
         order_obj.save()
         return Response({'message': 'Order edited successfully'}, status=status.HTTP_204_NO_CONTENT)
-    
-class DeliveryListCreateView(generics.ListCreateAPIView):
+
+class DeliveryViewSet(viewsets.ModelViewSet):    
     """
     General ViewSet Description:
 
-    API view for creating a new Delivery associated with an Order.
+    API view for creating a new Delivery associated with an Order, return a list, retrivea an individual one, update, delete.
     
+    get: get a delivery details
+    patch: update a delivery
+    delete: delete a delivery
     post: creates a delibery request with the needed data for an order
     """
     queryset = Delivery.objects.all()
@@ -254,68 +248,4 @@ class DeliveryListCreateView(generics.ListCreateAPIView):
 
         except Order.DoesNotExist:
             return Response({'error': 'Order not found'}, status=status.HTTP_404_NOT_FOUND)
-
-class DeliveryDetailView(generics.RetrieveUpdateDestroyAPIView):
-    """
-    General ViewSet Description:
-
-    API view for retrieving, updating, and deleting a Delivery.
-    
-    get: get a delivery details
-    patch: update a delivery
-    delete: delete a delivery
-    """
-    queryset = Delivery.objects.all()
-    serializer_class = DeliverySerializer
-
-
-
-#old create if meal were objects:
-# class OrderListCreateView(generics.ListCreateAPIView):
-#     queryset = Order.objects.all()
-#     serializer_class = OrderSerializer
-
-#     def create(self, request, *args, **kwargs):
-#         data=request.data
-#         meals_data = self.request.data.get('meal', [])
-#         sum = 0
-#         meal_obj = []
-
-#         try: 
-#             emp = Employee.objects.get(pk=data['empID'])
-#         except:
-#             return Response("invalid employee ID", status=status.HTTP_404_NOT_FOUND)
-#         print(emp)
-#         for i in meals_data:
-#             for j in i:
-#                 if j == 'price':
-#                     sum += i[j]
-#                 if j == 'id':
-#                     x = Meal.objects.get(pk=i[j])
-#                     meal_obj.append(x)
-
-#         for i in meal_obj:
-#             print(i)
-#             if i.capacity > 0:
-#                 i.capacity-=1
-#             i.sales+=1
-#             i.save()
         
-#         ord_data = {
-#             "empID": emp,
-#             "price": sum,
-#             "delFlag": data['delFlag'],
-#             "meal":meal_obj,
-#             "completed": data['completed'],
-#         }
-
-#         ord_obj = Order(empID= emp,
-#             price=sum,
-#             delFlag=data['delFlag'],
-#             completed= data['completed'])
-#         ord_obj.save()
-#         ord_obj.meal.set(meal_obj)
-        
-#         ord_obj.save()
-#         data['price'] = sum
-#         return Response(data, status=status.HTTP_201_CREATED)

@@ -12,7 +12,7 @@ router = DefaultRouter()
 router.register(r'admin', EmployeeAdminViewSet, basename='admin')
 router.register(r'emp', EmployeeViewSet, basename='employee')
 router.register(r'phone', PhoneNumberViewSet, basename='phone-number')
-router.register(r'ObE', OrderAndEmpViewSet, basename='order')
+router.register(r'ObE', OrderAndEmpViewSet, basename='OrderByEmp')
 
 
 urlpatterns = [

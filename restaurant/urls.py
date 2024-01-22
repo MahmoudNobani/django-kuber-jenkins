@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from drf_spectacular.views import SpectacularAPIView,SpectacularSwaggerView
 
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -23,7 +25,7 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView,
 )
 
-from drf_spectacular.views import SpectacularAPIView,SpectacularSwaggerView
+router = DefaultRouter()
 
 urlpatterns = [
     path('admin/', admin.site.urls),

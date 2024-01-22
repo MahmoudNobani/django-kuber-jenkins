@@ -255,7 +255,7 @@ class TestOrderViews:
         """
         client = APIClient()
         employee = Employee.objects.create(name="Test Employee", salary=40000.0, position="Casher", address="456 Side St")
-        url = reverse('order-detail', kwargs={'pk': employee.pk})
+        url = reverse('OrderByEmp-detail', kwargs={'pk': employee.pk})
 
         response = client.get(url)
         assert response.status_code == status.HTTP_200_OK

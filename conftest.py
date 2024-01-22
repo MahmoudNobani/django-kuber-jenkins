@@ -29,10 +29,12 @@ def create_test_data():
         'delivery': delivery,
     }
 
-
-
 @pytest.fixture
 def admin_user():
     return Employee.objects.create_superuser(username='admin', email="admin@gmail.com",password='password', salary=4523)
+
+@pytest.fixture
+def normal_user():
+    return Employee.objects.create_user(username='normal', email="normal@gmail.com",password='password', salary=4523)
 
 

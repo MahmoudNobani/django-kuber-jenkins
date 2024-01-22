@@ -48,7 +48,7 @@ class TestEmployeeViews:
         """
         client = APIClient()
         client.force_authenticate(admin_user)
-        url = reverse('employee-list-create')
+        url = reverse('admin-list')
         data = {
             "username": "k",
             "salary": 1324,
@@ -73,7 +73,7 @@ class TestEmployeeViews:
         """
         client = APIClient()
         client.force_authenticate(admin_user)
-        url = reverse('employee-list-create')
+        url = reverse('admin-list')
         
         # Create a sample employee for testing
         Employee.objects.create(name="Test Employee", salary=40000.0, position="Casher", address="456 Side St")
@@ -91,7 +91,7 @@ class TestEmployeeViews:
         client.force_authenticate(employee)
         url = reverse('employee-detail', kwargs={'pk': employee.pk})
         data = {"address": "nablus"}
-
+        print("HI")
         response = client.patch(url, data, format='json')
         print(response.data)
         assert response.status_code == status.HTTP_200_OK
@@ -108,7 +108,7 @@ class TestEmployeeViews:
         client = APIClient()
         client.force_authenticate(admin_user)
         employee = Employee.objects.create_user(username="Test Employee", password="m", email="user@gmail.com",salary=40000.0, position="Casher", address="456 Side St")
-        url = reverse('employee-detail', kwargs={'pk': employee.pk})
+        url = reverse('admin-detail', kwargs={'pk': employee.pk})
 
         response = client.delete(url)
         assert response.status_code == status.HTTP_204_NO_CONTENT
@@ -177,8 +177,9 @@ class TestOrderViews:
         """
         client = APIClient()
         employee = Employee.objects.create(name="Test Employee", salary=40000.0, position="Casher", address="456 Side St")
-        url = reverse('Orders-By-Emp', kwargs={'employee_id': employee.pk})
+        url = reverse('order-detail', kwargs={'pk': employee.pk})
 
         response = client.get(url)
         assert response.status_code == status.HTTP_200_OK
         assert len(response.data) == Order.objects.filter(empID=employee.pk).count()
+

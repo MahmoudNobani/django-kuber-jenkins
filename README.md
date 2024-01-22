@@ -1,5 +1,5 @@
 # OVERVIEW
-This project aims to build an indoor restaurant system that tackles the problems a normal restaurant faces.
+This project aims to build an indoor restaurant system that tackles the problems a normal restaurant faces using django technology and routers.
 
 # GOALS
 This software will provide a database for all the available meals, employees and orders, while performing the needed operation of (add, remove, update) while checking the capacity, prices and performing some analytics.

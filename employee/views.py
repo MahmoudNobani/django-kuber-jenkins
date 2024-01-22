@@ -9,15 +9,47 @@ from meal.serializer import OrderSerializer
 from rest_framework import status 
 from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly, IsAuthenticated, IsAuthenticatedOrReadOnly, IsAdminUser
 from rest_framework.authentication import TokenAuthentication, BasicAuthentication, SessionAuthentication
+from rest_framework import viewsets
 from .permissions import IsAuthorOrReadOnly
 
-class EmployeeListCreateView(generics.ListCreateAPIView):
+#FINAL VERSION OF VIEWS USING GENERICS
+
+class EmployeeViewSet(viewsets.ModelViewSet):
     """
     general viewset description
-    View for listing and creating Employee instances.
+    View for listing, creating, retrieving, updating, and deleting Employee instances.
+    Supports GET, POST, PATCH, and DELETE methods.
 
     List: list all employees
-    create: create all employees, this api also accepts phone numbers with it
+    create: create all employees, this API also accepts phone numbers with it
+    retrieve: retrieve data for an employee with the associated phone number
+    partial update: partially updates employee data
+    delete: delete employee data
+
+    Only accessible to admin users with basic authentication.
+    """
+    permission_classes = [IsAuthorOrReadOnly]
+    authentication_classes = [BasicAuthentication]
+    queryset = Employee.objects.all()
+    serializer_class = EmpSerWithPhone
+    http_method_names = ["patch","get"]
+
+    def get_queryset(self):
+        employee_id = self.kwargs['pk']
+        return Employee.objects.filter(id=employee_id)
+
+
+class EmployeeAdminViewSet(viewsets.ModelViewSet):
+    """
+    general viewset description
+    View for listing, creating, retrieving, updating, and deleting Employee instances.
+    Supports GET, POST, PATCH, and DELETE methods.
+
+    List: list all employees
+    create: create all employees, this API also accepts phone numbers with it
+    retrieve: retrieve data for an employee with the associated phone number
+    partial update: partially updates employee data
+    delete: delete employee data
 
     Only accessible to admin users with basic authentication.
     """
@@ -25,70 +57,40 @@ class EmployeeListCreateView(generics.ListCreateAPIView):
     authentication_classes = [BasicAuthentication]
     queryset = Employee.objects.all()
     serializer_class = EmpSerWithPhone
+    http_method_names = ["patch","get","delete","post"]
 
-class EmployeeDetailView(generics.RetrieveUpdateDestroyAPIView):
+class PhoneNumberViewSet(viewsets.ModelViewSet):
     """
-    general viewset description:
-    View for retrieving, updating, and deleting an Employee instance.
-    Supports PATCH, GET, and DELETE methods.
-
-    retrieve: retive data for employee with the associated phone number
-    partial update: partially updates employee data
-    delete: delete employee data
-
-    Only accessible to the original author or admin users with basic authentication.
-    """
-    permission_classes = [IsAuthorOrReadOnly]
-    authentication_classes = [BasicAuthentication]
-    queryset = Employee.objects.all()
-    serializer_class = EmpSerWithPhone
-    http_method_names = ["patch","get","delete"]
-
-class PhoneNumberListCreateView(generics.ListCreateAPIView):
-    """
-    general viewset description:
-    View for listing and creating PhoneNumber instances.
+    general viewset description
+    View for listing, creating, retrieving, updating, and deleting PhoneNumber instances.
+    Supports GET, POST, PATCH, and DELETE methods.
 
     List: list all phone numbers
     create: create phone for an existing employee
+    retrieve: retrieve a specific phone number
+    update: update a specific phone number
+    delete: delete a specific phone number
 
     No specific permissions are set.
     """
-    #permission_classes = [IsAuthenticatedOrReadOnly]
+    # No specific permissions are set.
     queryset = PhoneNumber.objects.all()
     serializer_class = PhoneNumberSerializer
 
-class PhoneNumberDetailView(generics.RetrieveUpdateDestroyAPIView):
+class OrderAndEmpViewSet(viewsets.ReadOnlyModelViewSet):
     """
-    general viewset description:
-    View for retrieving, updating, and deleting a PhoneNumber instance.
-
-    retrieve: Retrieve a specifc phone number
-
-    update: Update a specifc phone number
-
-    delete: delete a specifc phone number
-
-    No specific permissions are set.
-    """
-    #permission_classes = [IsAuthenticatedOrReadOnly]
-    queryset = PhoneNumber.objects.all()
-    serializer_class = PhoneNumberSerializer
-
-class ListOrdersByEmp(generics.ListAPIView):
-    """
-    general viewset description:
+    general viewset description
     View for listing orders associated with a specific employee.
 
-    list: get the order associated with a specifc employee
+    list: get the order associated with a specific employee
     """
     serializer_class = OrderSerializer
 
     def get_queryset(self):
-        employee_id = self.kwargs['employee_id']
+        employee_id = self.kwargs['pk']
         return Order.objects.filter(empID=employee_id)
 
-    def list(self, request, *args, **kwargs):
+    def retrieve(self, request, *args, **kwargs):
         try:
             queryset = self.get_queryset()
             serializer = self.get_serializer(queryset, many=True)
@@ -96,6 +98,92 @@ class ListOrdersByEmp(generics.ListAPIView):
         except Order.DoesNotExist:
             return Response({'error': 'resource not found'}, status=status.HTTP_404_NOT_FOUND)
 
+# class EmployeeListCreateView(generics.ListCreateAPIView):
+#     """
+#     general viewset description
+#     View for listing and creating Employee instances.
+
+#     List: list all employees
+#     create: create all employees, this api also accepts phone numbers with it
+
+#     Only accessible to admin users with basic authentication.
+#     """
+#     permission_classes = [IsAdminUser]
+#     authentication_classes = [BasicAuthentication]
+#     queryset = Employee.objects.all()
+#     serializer_class = EmpSerWithPhone
+
+# class EmployeeDetailView(generics.RetrieveUpdateDestroyAPIView):
+#     """
+#     general viewset description:
+#     View for retrieving, updating, and deleting an Employee instance.
+#     Supports PATCH, GET, and DELETE methods.
+
+#     retrieve: retive data for employee with the associated phone number
+#     partial update: partially updates employee data
+#     delete: delete employee data
+
+#     Only accessible to the original author or admin users with basic authentication.
+#     """
+#     permission_classes = [IsAuthorOrReadOnly]
+#     authentication_classes = [BasicAuthentication]
+#     queryset = Employee.objects.all()
+#     serializer_class = EmpSerWithPhone
+#     http_method_names = ["patch","get","delete"]
+
+# class PhoneNumberListCreateView(generics.ListCreateAPIView):
+#     """
+#     general viewset description:
+#     View for listing and creating PhoneNumber instances.
+
+#     List: list all phone numbers
+#     create: create phone for an existing employee
+
+#     No specific permissions are set.
+#     """
+#     #permission_classes = [IsAuthenticatedOrReadOnly]
+#     queryset = PhoneNumber.objects.all()
+#     serializer_class = PhoneNumberSerializer
+
+# class PhoneNumberDetailView(generics.RetrieveUpdateDestroyAPIView):
+#     """
+#     general viewset description:
+#     View for retrieving, updating, and deleting a PhoneNumber instance.
+
+#     retrieve: Retrieve a specifc phone number
+
+#     update: Update a specifc phone number
+
+#     delete: delete a specifc phone number
+
+#     No specific permissions are set.
+#     """
+#     #permission_classes = [IsAuthenticatedOrReadOnly]
+#     queryset = PhoneNumber.objects.all()
+#     serializer_class = PhoneNumberSerializer
+
+# class ListOrdersByEmp(generics.ListAPIView):
+#     """
+#     general viewset description:
+#     View for listing orders associated with a specific employee.
+
+#     list: get the order associated with a specifc employee
+#     """
+#     serializer_class = OrderSerializer
+
+#     def get_queryset(self):
+#         employee_id = self.kwargs['employee_id']
+#         return Order.objects.filter(empID=employee_id)
+
+#     def list(self, request, *args, **kwargs):
+#         try:
+#             queryset = self.get_queryset()
+#             serializer = self.get_serializer(queryset, many=True)
+#             return Response(serializer.data, status=status.HTTP_200_OK)
+#         except Order.DoesNotExist:
+#             return Response({'error': 'resource not found'}, status=status.HTTP_404_NOT_FOUND)
+
+#IDK FIRST ITTERATION, AND BEFORE EDITING
 # class EmployeeListView(generics.ListCreateAPIView):
 #     permission_classes = [IsAuthenticated]
 #     queryset = Employee.objects.all()

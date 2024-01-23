@@ -30,6 +30,13 @@ def create_test_data():
     }
 
 @pytest.fixture
+def del_order():
+    employee = Employee.objects.create(username='John',name='John Doe', password="m", salary=50000.0, position='Manager', address='123 Main St')
+    order = Order.objects.create(empID=employee, price=35.97, completed=False, delFlag=True)
+
+    return order
+
+@pytest.fixture
 def admin_user():
     return Employee.objects.create_superuser(username='admin', email="admin@gmail.com",password='password', salary=4523)
 

@@ -40,7 +40,7 @@ class MealViewSet(viewsets.GenericViewSet,mixins.CreateModelMixin,
             permission_classes = [IsAdminUser]
         elif self.action in ['list', 'retrieve']:
             permission_classes = [IsAuthenticated]
-        elif self.action == 'update':
+        elif self.action == 'update' or self.action == 'partial_update':
             permission_classes = [IsAdminUser]
         else:
             permission_classes = []

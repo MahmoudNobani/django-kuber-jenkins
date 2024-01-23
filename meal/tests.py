@@ -82,6 +82,32 @@ def test_meal_list_create_view(admin_user, create_test_data):
     assert len(response.data) == 4  # Assuming there are already 3 meals from the fixture
 
 @pytest.mark.django_db
+def test_meal_list_create_perm_view(normal_user, create_test_data):
+    """
+    Test the Meal list and create views.
+
+    Parameters:
+        admin_user: A Django user with admin privileges.
+        create_test_data (fixture): A fixture providing test data.
+
+    Returns:
+        None
+    """
+    client = APIClient()
+    url = reverse('meal-list')
+    data = {'name': 'New Meal', 'price': 9.99, 'capacity': 30, 'sales': 5}
+
+    client.force_authenticate(normal_user)
+    # Create a new meal
+    response = client.post(url, data)
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    url = reverse('meal-list')
+    # Check if the meal is listed
+    response = client.get(url)
+    assert response.status_code == status.HTTP_200_OK
+
+@pytest.mark.django_db
 def test_update_meal(admin_user, create_test_data):
     """
     Test updating a Meal.
@@ -122,6 +148,35 @@ def test_update_meal(admin_user, create_test_data):
     assert response.data['capacity'] == updated_data['capacity']
     assert response.data['sales'] == updated_data['sales']
 
+@pytest.mark.django_db
+def test_update_perm_meal(normal_user, create_test_data):
+    """
+    Test updating a Meal.
+
+    Parameters:
+        admin_user: A Django user with admin privileges.
+        create_test_data (fixture): A fixture providing test data.
+
+    Returns:
+        None
+    """
+    client = APIClient()
+    #client.force_authenticate(normal_user)
+    meal_id = create_test_data['meal1'].id
+    url = reverse('meal-detail', kwargs={'pk': meal_id})
+
+    # New data to update the meal
+    #updated_data = {"name": "qer","price": 9.0,"capacity": 13,"sales": 10}
+    updated_data = {
+        "name": "pizza",
+        "price": 12.0,
+        "capacity": 20,
+        "sales": 12
+    }
+
+    # Update the meal
+    response = client.patch(url, data=updated_data)
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
 @pytest.mark.django_db
 def test_order_delete_view(client, create_test_data):
@@ -146,7 +201,7 @@ def test_order_delete_view(client, create_test_data):
     # # Ensure the order is deleted
     # response = client.get(url)
     # assert response.status_code == status.HTTP_404_NOT_FOUND
-
+    
 @pytest.mark.django_db
 def test_add_order(client, create_test_data):
     """
@@ -215,3 +270,97 @@ def test_patial_update_order(client, create_test_data):
 
     response = client.patch(url, data=updated_order_data, content_type='application/json')
     assert response.status_code == status.HTTP_204_NO_CONTENT
+
+@pytest.mark.django_db
+class TestDeliveryViewSet:
+    """
+    test for delivey viewset
+    """
+    def test_create_delivery_successful(self,del_order):
+        """
+        Test creating a delivery successfully.
+
+        Args: 
+            del_order: order object to be tested
+        """
+        data = {
+            "orderID": del_order.pk,
+            "name": "Mahmoud",
+            "address": "nablus",
+        }
+
+        client = APIClient()
+
+        url = reverse('delivery-list')
+
+        response = client.post(url, data, format='json')
+
+        assert response.status_code == status.HTTP_201_CREATED
+        assert Delivery.objects.count() == 1
+
+    def test_create_delivery_order_not_found(self,del_order):
+        """
+        Test creating a delivery with a non-existing order ID.
+
+        Args: 
+            del_order: order object to be tested
+        """
+        data = {
+            "orderID": 999, 
+            "name": "Mahmoud",
+            "address": "nablus",
+        }
+
+        client = APIClient()
+
+        url = reverse('delivery-list')
+
+        response = client.post(url, data, format='json')
+
+        assert response.status_code == status.HTTP_404_NOT_FOUND
+
+    def test_create_delivery_order_completed(self,del_order):
+        """
+        Test creating a delivery when the order is marked as completed.
+
+        Args: 
+            del_order: order object to be tested
+        """
+        del_order.completed = True
+        del_order.save()
+
+        data = {
+            "orderID": del_order.pk,
+            "name": "Mahmoud",
+            "address": "nablus",
+        }
+
+        client = APIClient()
+
+        url = reverse('delivery-list')
+        response = client.post(url, data, format='json')
+        print(response.status_code)
+        assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+
+    def test_create_delivery_delivery_flag_false(self, del_order):
+        """
+        Test creating a delivery when the order's delivery flag is set to False.
+
+        Args: 
+            del_order: order object to be tested
+        """
+        del_order.delFlag = False
+        del_order.save()
+
+        data = {
+            "orderID": del_order.pk,
+            "name": "Mahmoud",
+            "address": "nablus",
+        }
+
+        client = APIClient()
+
+        url = reverse('delivery-list')
+        response = client.post(url, data, format='json')
+
+        assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY

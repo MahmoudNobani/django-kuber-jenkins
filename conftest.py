@@ -3,7 +3,6 @@ import pytest
 from meal.models import Meal, Order, Delivery
 from employee.models import Employee, PhoneNumber
 
-
 #DB TESTS
 @pytest.fixture
 def create_test_data():

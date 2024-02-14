@@ -4,11 +4,65 @@ info:
   version: 1.0.0
   description: Your project description
 paths:
-  /api/emp/:
+  /api/employee/ObE/:
     get:
-      operationId: api_emp_list
+      operationId: api_employee_ObE_list
       description: |-
-        View for listing and creating Employee instances.
+        general viewset description
+        View for listing orders associated with a specific employee.
+
+        list: get the order associated with a specific employee
+      tags:
+      - api
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+          description: ''
+  /api/employee/ObE/{id}/:
+    get:
+      operationId: api_employee_ObE_retrieve
+      description: |-
+        general viewset description
+        View for listing orders associated with a specific employee.
+
+        list: get the order associated with a specific employee
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+  /api/employee/admin/:
+    get:
+      operationId: api_employee_admin_list
+      description: |-
+        general viewset description
+        View for listing, creating, retrieving, updating, and deleting Employee instances.
+        Supports GET, POST, PATCH, and DELETE methods.
+
+        List: list all employees
+        create: create all employees, this API also accepts phone numbers with it
+        retrieve: retrieve data for an employee with the associated phone number
+        partial update: partially updates employee data
+        delete: delete employee data
 
         Only accessible to admin users with basic authentication.
       tags:
@@ -25,9 +79,17 @@ paths:
                   $ref: '#/components/schemas/EmpSerWithPhone'
           description: ''
     post:
-      operationId: api_emp_create
+      operationId: api_employee_admin_create
       description: |-
-        View for listing and creating Employee instances.
+        general viewset description
+        View for listing, creating, retrieving, updating, and deleting Employee instances.
+        Supports GET, POST, PATCH, and DELETE methods.
+
+        List: list all employees
+        create: create all employees, this API also accepts phone numbers with it
+        retrieve: retrieve data for an employee with the associated phone number
+        partial update: partially updates employee data
+        delete: delete employee data
 
         Only accessible to admin users with basic authentication.
       tags:
@@ -53,19 +115,27 @@ paths:
               schema:
                 $ref: '#/components/schemas/EmpSerWithPhone'
           description: ''
-  /api/emp/{id}/:
+  /api/employee/admin/{id}/:
     get:
-      operationId: api_emp_retrieve
+      operationId: api_employee_admin_retrieve
       description: |-
-        View for retrieving, updating, and deleting an Employee instance.
+        general viewset description
+        View for listing, creating, retrieving, updating, and deleting Employee instances.
+        Supports GET, POST, PATCH, and DELETE methods.
 
-        Only accessible to the original author or admin users with basic authentication.
-        Supports PATCH, GET, and DELETE methods.
+        List: list all employees
+        create: create all employees, this API also accepts phone numbers with it
+        retrieve: retrieve data for an employee with the associated phone number
+        partial update: partially updates employee data
+        delete: delete employee data
+
+        Only accessible to admin users with basic authentication.
       parameters:
       - in: path
         name: id
         schema:
           type: integer
+        description: A unique integer value identifying this user.
         required: true
       tags:
       - api
@@ -79,17 +149,25 @@ paths:
                 $ref: '#/components/schemas/EmpSerWithPhone'
           description: ''
     patch:
-      operationId: api_emp_partial_update
+      operationId: api_employee_admin_partial_update
       description: |-
-        View for retrieving, updating, and deleting an Employee instance.
+        general viewset description
+        View for listing, creating, retrieving, updating, and deleting Employee instances.
+        Supports GET, POST, PATCH, and DELETE methods.
 
-        Only accessible to the original author or admin users with basic authentication.
-        Supports PATCH, GET, and DELETE methods.
+        List: list all employees
+        create: create all employees, this API also accepts phone numbers with it
+        retrieve: retrieve data for an employee with the associated phone number
+        partial update: partially updates employee data
+        delete: delete employee data
+
+        Only accessible to admin users with basic authentication.
       parameters:
       - in: path
         name: id
         schema:
           type: integer
+        description: A unique integer value identifying this user.
         required: true
       tags:
       - api
@@ -114,17 +192,25 @@ paths:
                 $ref: '#/components/schemas/EmpSerWithPhone'
           description: ''
     delete:
-      operationId: api_emp_destroy
+      operationId: api_employee_admin_destroy
       description: |-
-        View for retrieving, updating, and deleting an Employee instance.
+        general viewset description
+        View for listing, creating, retrieving, updating, and deleting Employee instances.
+        Supports GET, POST, PATCH, and DELETE methods.
 
-        Only accessible to the original author or admin users with basic authentication.
-        Supports PATCH, GET, and DELETE methods.
+        List: list all employees
+        create: create all employees, this API also accepts phone numbers with it
+        retrieve: retrieve data for an employee with the associated phone number
+        partial update: partially updates employee data
+        delete: delete employee data
+
+        Only accessible to admin users with basic authentication.
       parameters:
       - in: path
         name: id
         schema:
           type: integer
+        description: A unique integer value identifying this user.
         required: true
       tags:
       - api
@@ -133,20 +219,25 @@ paths:
       responses:
         '204':
           description: No response body
-  /api/emp/ObE/{employee_id}:
+  /api/employee/emp/:
     get:
-      operationId: api_emp_ObE_list
-      description: View for listing orders associated with a specific employee.
-      parameters:
-      - in: path
-        name: employee_id
-        schema:
-          type: integer
-        required: true
+      operationId: api_employee_emp_list
+      description: |-
+        general viewset description
+        View for listing, creating, retrieving, updating, and deleting Employee instances.
+        Supports GET, POST, PATCH, and DELETE methods.
+
+        List: list all employees
+        create: create all employees, this API also accepts phone numbers with it
+        retrieve: retrieve data for an employee with the associated phone number
+        partial update: partially updates employee data
+        delete: delete employee data
+
+        Only accessible to admin users with basic authentication.
       tags:
       - api
       security:
-      - {}
+      - basicAuth: []
       responses:
         '200':
           content:
@@ -154,13 +245,97 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Order'
+                  $ref: '#/components/schemas/EmpSerWithPhone'
           description: ''
-  /api/emp/phone/:
+  /api/employee/emp/{id}/:
     get:
-      operationId: api_emp_phone_list
+      operationId: api_employee_emp_retrieve
       description: |-
-        View for listing and creating PhoneNumber instances.
+        general viewset description
+        View for listing, creating, retrieving, updating, and deleting Employee instances.
+        Supports GET, POST, PATCH, and DELETE methods.
+
+        List: list all employees
+        create: create all employees, this API also accepts phone numbers with it
+        retrieve: retrieve data for an employee with the associated phone number
+        partial update: partially updates employee data
+        delete: delete employee data
+
+        Only accessible to admin users with basic authentication.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - api
+      security:
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmpSerWithPhone'
+          description: ''
+    patch:
+      operationId: api_employee_emp_partial_update
+      description: |-
+        general viewset description
+        View for listing, creating, retrieving, updating, and deleting Employee instances.
+        Supports GET, POST, PATCH, and DELETE methods.
+
+        List: list all employees
+        create: create all employees, this API also accepts phone numbers with it
+        retrieve: retrieve data for an employee with the associated phone number
+        partial update: partially updates employee data
+        delete: delete employee data
+
+        Only accessible to admin users with basic authentication.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedEmpSerWithPhone'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedEmpSerWithPhone'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedEmpSerWithPhone'
+      security:
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmpSerWithPhone'
+          description: ''
+  /api/employee/phone/:
+    get:
+      operationId: api_employee_phone_list
+      description: |-
+        general viewset description
+        View for listing, creating, retrieving, updating, and deleting PhoneNumber instances.
+        Supports GET, POST, PATCH, and DELETE methods.
+
+        List: list all phone numbers
+        create: create phone for an existing employee
+        retrieve: retrieve a specific phone number
+        update: update a specific phone number
+        delete: delete a specific phone number
 
         No specific permissions are set.
       tags:
@@ -177,9 +352,17 @@ paths:
                   $ref: '#/components/schemas/PhoneNumber'
           description: ''
     post:
-      operationId: api_emp_phone_create
+      operationId: api_employee_phone_create
       description: |-
-        View for listing and creating PhoneNumber instances.
+        general viewset description
+        View for listing, creating, retrieving, updating, and deleting PhoneNumber instances.
+        Supports GET, POST, PATCH, and DELETE methods.
+
+        List: list all phone numbers
+        create: create phone for an existing employee
+        retrieve: retrieve a specific phone number
+        update: update a specific phone number
+        delete: delete a specific phone number
 
         No specific permissions are set.
       tags:
@@ -205,11 +388,19 @@ paths:
               schema:
                 $ref: '#/components/schemas/PhoneNumber'
           description: ''
-  /api/emp/phone/{id}/:
+  /api/employee/phone/{id}/:
     get:
-      operationId: api_emp_phone_retrieve
+      operationId: api_employee_phone_retrieve
       description: |-
-        View for retrieving, updating, and deleting a PhoneNumber instance.
+        general viewset description
+        View for listing, creating, retrieving, updating, and deleting PhoneNumber instances.
+        Supports GET, POST, PATCH, and DELETE methods.
+
+        List: list all phone numbers
+        create: create phone for an existing employee
+        retrieve: retrieve a specific phone number
+        update: update a specific phone number
+        delete: delete a specific phone number
 
         No specific permissions are set.
       parameters:
@@ -217,6 +408,7 @@ paths:
         name: id
         schema:
           type: integer
+        description: A unique integer value identifying this phone number.
         required: true
       tags:
       - api
@@ -230,9 +422,17 @@ paths:
                 $ref: '#/components/schemas/PhoneNumber'
           description: ''
     put:
-      operationId: api_emp_phone_update
+      operationId: api_employee_phone_update
       description: |-
-        View for retrieving, updating, and deleting a PhoneNumber instance.
+        general viewset description
+        View for listing, creating, retrieving, updating, and deleting PhoneNumber instances.
+        Supports GET, POST, PATCH, and DELETE methods.
+
+        List: list all phone numbers
+        create: create phone for an existing employee
+        retrieve: retrieve a specific phone number
+        update: update a specific phone number
+        delete: delete a specific phone number
 
         No specific permissions are set.
       parameters:
@@ -240,6 +440,7 @@ paths:
         name: id
         schema:
           type: integer
+        description: A unique integer value identifying this phone number.
         required: true
       tags:
       - api
@@ -265,9 +466,17 @@ paths:
                 $ref: '#/components/schemas/PhoneNumber'
           description: ''
     patch:
-      operationId: api_emp_phone_partial_update
+      operationId: api_employee_phone_partial_update
       description: |-
-        View for retrieving, updating, and deleting a PhoneNumber instance.
+        general viewset description
+        View for listing, creating, retrieving, updating, and deleting PhoneNumber instances.
+        Supports GET, POST, PATCH, and DELETE methods.
+
+        List: list all phone numbers
+        create: create phone for an existing employee
+        retrieve: retrieve a specific phone number
+        update: update a specific phone number
+        delete: delete a specific phone number
 
         No specific permissions are set.
       parameters:
@@ -275,6 +484,7 @@ paths:
         name: id
         schema:
           type: integer
+        description: A unique integer value identifying this phone number.
         required: true
       tags:
       - api
@@ -299,9 +509,17 @@ paths:
                 $ref: '#/components/schemas/PhoneNumber'
           description: ''
     delete:
-      operationId: api_emp_phone_destroy
+      operationId: api_employee_phone_destroy
       description: |-
-        View for retrieving, updating, and deleting a PhoneNumber instance.
+        general viewset description
+        View for listing, creating, retrieving, updating, and deleting PhoneNumber instances.
+        Supports GET, POST, PATCH, and DELETE methods.
+
+        List: list all phone numbers
+        create: create phone for an existing employee
+        retrieve: retrieve a specific phone number
+        update: update a specific phone number
+        delete: delete a specific phone number
 
         No specific permissions are set.
       parameters:
@@ -309,6 +527,7 @@ paths:
         name: id
         schema:
           type: integer
+        description: A unique integer value identifying this phone number.
         required: true
       tags:
       - api
@@ -317,9 +536,42 @@ paths:
       responses:
         '204':
           description: No response body
-  /api/meal/:
+  /api/meal/MealApp/:
+    get:
+      operationId: api_meal_MealApp_list
+      description: |-
+        General ViewSet Description:
+
+        API view for creating, listing, retrieving, and updating Meals.
+
+        create: Allow the addition of a new meal.
+        list: List all the meals in the system
+        retrieve: Retrieve a specific meal.
+        update: Update attributes of a meal.
+      tags:
+      - api
+      security:
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Meal'
+          description: ''
     post:
-      operationId: api_meal_create
+      operationId: api_meal_MealApp_create
+      description: |-
+        General ViewSet Description:
+
+        API view for creating, listing, retrieving, and updating Meals.
+
+        create: Allow the addition of a new meal.
+        list: List all the meals in the system
+        retrieve: Retrieve a specific meal.
+        update: Update attributes of a meal.
       tags:
       - api
       requestBody:
@@ -343,14 +595,53 @@ paths:
               schema:
                 $ref: '#/components/schemas/Meal'
           description: ''
-  /api/meal/{id}/:
-    put:
-      operationId: api_meal_update
+  /api/meal/MealApp/{id}/:
+    get:
+      operationId: api_meal_MealApp_retrieve
+      description: |-
+        General ViewSet Description:
+
+        API view for creating, listing, retrieving, and updating Meals.
+
+        create: Allow the addition of a new meal.
+        list: List all the meals in the system
+        retrieve: Retrieve a specific meal.
+        update: Update attributes of a meal.
       parameters:
       - in: path
         name: id
         schema:
           type: integer
+        description: A unique integer value identifying this meal.
+        required: true
+      tags:
+      - api
+      security:
+      - basicAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Meal'
+          description: ''
+    put:
+      operationId: api_meal_MealApp_update
+      description: |-
+        General ViewSet Description:
+
+        API view for creating, listing, retrieving, and updating Meals.
+
+        create: Allow the addition of a new meal.
+        list: List all the meals in the system
+        retrieve: Retrieve a specific meal.
+        update: Update attributes of a meal.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this meal.
         required: true
       tags:
       - api
@@ -376,12 +667,22 @@ paths:
                 $ref: '#/components/schemas/Meal'
           description: ''
     patch:
-      operationId: api_meal_partial_update
+      operationId: api_meal_MealApp_partial_update
+      description: |-
+        General ViewSet Description:
+
+        API view for creating, listing, retrieving, and updating Meals.
+
+        create: Allow the addition of a new meal.
+        list: List all the meals in the system
+        retrieve: Retrieve a specific meal.
+        update: Update attributes of a meal.
       parameters:
       - in: path
         name: id
         schema:
           type: integer
+        description: A unique integer value identifying this meal.
         required: true
       tags:
       - api
@@ -408,6 +709,15 @@ paths:
   /api/meal/deli/:
     get:
       operationId: api_meal_deli_list
+      description: |-
+        General ViewSet Description:
+
+        API view for creating a new Delivery associated with an Order, return a list, retrivea an individual one, update, delete.
+
+        get: get a delivery details
+        patch: update a delivery
+        delete: delete a delivery
+        post: creates a delibery request with the needed data for an order
       tags:
       - api
       security:
@@ -423,6 +733,16 @@ paths:
           description: ''
     post:
       operationId: api_meal_deli_create
+      description: |-
+        create: Creates a new Delivery associated with an Order.
+
+        Method:
+            - POST
+
+        Parameters:
+            - data: Request data containing delivery details and associated order ID.
+        Response:
+            - Status code: 201 if successful, 404 if the order is not found or delivery is not allowed.
       tags:
       - api
       requestBody:
@@ -449,11 +769,21 @@ paths:
   /api/meal/deli/{id}/:
     get:
       operationId: api_meal_deli_retrieve
+      description: |-
+        General ViewSet Description:
+
+        API view for creating a new Delivery associated with an Order, return a list, retrivea an individual one, update, delete.
+
+        get: get a delivery details
+        patch: update a delivery
+        delete: delete a delivery
+        post: creates a delibery request with the needed data for an order
       parameters:
       - in: path
         name: id
         schema:
           type: integer
+        description: A unique integer value identifying this delivery.
         required: true
       tags:
       - api
@@ -468,11 +798,21 @@ paths:
           description: ''
     put:
       operationId: api_meal_deli_update
+      description: |-
+        General ViewSet Description:
+
+        API view for creating a new Delivery associated with an Order, return a list, retrivea an individual one, update, delete.
+
+        get: get a delivery details
+        patch: update a delivery
+        delete: delete a delivery
+        post: creates a delibery request with the needed data for an order
       parameters:
       - in: path
         name: id
         schema:
           type: integer
+        description: A unique integer value identifying this delivery.
         required: true
       tags:
       - api
@@ -499,11 +839,21 @@ paths:
           description: ''
     patch:
       operationId: api_meal_deli_partial_update
+      description: |-
+        General ViewSet Description:
+
+        API view for creating a new Delivery associated with an Order, return a list, retrivea an individual one, update, delete.
+
+        get: get a delivery details
+        patch: update a delivery
+        delete: delete a delivery
+        post: creates a delibery request with the needed data for an order
       parameters:
       - in: path
         name: id
         schema:
           type: integer
+        description: A unique integer value identifying this delivery.
         required: true
       tags:
       - api
@@ -529,11 +879,21 @@ paths:
           description: ''
     delete:
       operationId: api_meal_deli_destroy
+      description: |-
+        General ViewSet Description:
+
+        API view for creating a new Delivery associated with an Order, return a list, retrivea an individual one, update, delete.
+
+        get: get a delivery details
+        patch: update a delivery
+        delete: delete a delivery
+        post: creates a delibery request with the needed data for an order
       parameters:
       - in: path
         name: id
         schema:
           type: integer
+        description: A unique integer value identifying this delivery.
         required: true
       tags:
       - api
@@ -542,46 +902,19 @@ paths:
       responses:
         '204':
           description: No response body
-  /api/meal/list/:
+  /api/meal/order/:
     get:
-      operationId: api_meal_list_list
-      tags:
-      - api
-      security:
-      - tokenAuth: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Meal'
-          description: ''
-  /api/meal/list/{id}/:
-    get:
-      operationId: api_meal_list_retrieve
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        required: true
-      tags:
-      - api
-      security:
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Meal'
-          description: ''
-  /api/meal/ord/:
-    get:
-      operationId: api_meal_ord_list
+      operationId: api_meal_order_list
+      description: |-
+        General ViewSet Description:
+
+        API view for creating, retrieving, updating, and deleting Orders.
+
+        create: Creates a new Order.
+        list: Lists all orders in the system.
+        retrieve: Retrieves a specific order.
+        partial_update: Partially updates order data (completed or delFlag).
+        destroy: Deletes an order.
       tags:
       - api
       security:
@@ -596,7 +929,18 @@ paths:
                   $ref: '#/components/schemas/Order'
           description: ''
     post:
-      operationId: api_meal_ord_create
+      operationId: api_meal_order_create
+      description: |-
+        create: Creates a new Order.
+
+        Method:
+            - POST
+
+        Parameters:
+            - data: Request data containing order details, including the list of meals.
+
+        Response:
+            - Status code: 201 if successful, 404 if invalid employee or meal IDs.
       tags:
       - api
       requestBody:
@@ -620,14 +964,25 @@ paths:
               schema:
                 $ref: '#/components/schemas/Order'
           description: ''
-  /api/meal/ord/{id}/:
+  /api/meal/order/{id}/:
     get:
-      operationId: api_meal_ord_retrieve
+      operationId: api_meal_order_retrieve
+      description: |-
+        General ViewSet Description:
+
+        API view for creating, retrieving, updating, and deleting Orders.
+
+        create: Creates a new Order.
+        list: Lists all orders in the system.
+        retrieve: Retrieves a specific order.
+        partial_update: Partially updates order data (completed or delFlag).
+        destroy: Deletes an order.
       parameters:
       - in: path
         name: id
         schema:
           type: integer
+        description: A unique integer value identifying this order.
         required: true
       tags:
       - api
@@ -641,12 +996,25 @@ paths:
                 $ref: '#/components/schemas/Order'
           description: ''
     patch:
-      operationId: api_meal_ord_partial_update
+      operationId: api_meal_order_partial_update
+      description: |-
+        partial_update: Partially updates an Order's data (completed or delFlag).
+
+        Method:
+            - PATCH
+
+        Parameters:
+            - pk: Primary key of the Order.
+            - request: Request data containing fields to be updated.
+
+        Response:
+            - Status code: 204 if successful, 404 if the Order is not found.
       parameters:
       - in: path
         name: id
         schema:
           type: integer
+        description: A unique integer value identifying this order.
         required: true
       tags:
       - api
@@ -671,12 +1039,25 @@ paths:
                 $ref: '#/components/schemas/Order'
           description: ''
     delete:
-      operationId: api_meal_ord_destroy
+      operationId: api_meal_order_destroy
+      description: |-
+        destroy: Deletes an Order.
+
+        Method:
+            - DELETE
+
+        Parameters:
+            - pk: Primary key of the Order.
+            - request: the request and its data
+
+        Response:
+            - Status code: 204 if successful, 404 if the Order is not found.
       parameters:
       - in: path
         name: id
         schema:
           type: integer
+        description: A unique integer value identifying this order.
         required: true
       tags:
       - api
@@ -770,6 +1151,13 @@ components:
   schemas:
     Delivery:
       type: object
+      description: |-
+        Serializer for the Delivery model.
+
+        Attributes:
+            Meta:
+                model (Delivery): The model associated with the serializer.
+                fields (list): The fields to be included in the serialized representation ('name', 'address', 'orderID').
       properties:
         name:
           type: string
@@ -789,10 +1177,15 @@ components:
 
         Includes methods for retrieving and updating associated PhoneNumber instances.
         Attributes:
-        - phone_numbers as anested serilizer
+        - phone_numbers as a nested serilizer
         - number as a custom field for numbers
         - password as a write only field
         - and all other necessicy field in meta
+
+        Meta:
+            model (Employee): The model associated with the serializer.
+            fields (list): The fields to be included in the serialized representation ('pk','username','salary','position','number','email','password','address','phone_numbers').
+            read_only_fields (list): Fields that are read-only in the serialized representation ('pk')
       properties:
         pk:
           type: integer
@@ -811,7 +1204,16 @@ components:
           type: string
           maxLength: 100
         number:
-          type: string
+          type: array
+          items: {}
+          description: |-
+            Retrieve and return the list of phone numbers objects associated with the Employee.
+
+            Args:
+                obj (Employee): The Employee instance for which phone numbers are to be retrieved.
+
+            Returns:
+                list: A list of phone numbers objects associated with the Employee.
           readOnly: true
         email:
           type: string
@@ -838,7 +1240,13 @@ components:
       - username
     Employee:
       type: object
-      description: Serializer for the Employee model.
+      description: |-
+        Serializer for the Employee model.
+
+        Attributes:
+            Meta:
+                model (Employee): The model associated with the serializer.
+                fields (list): The fields to be included in the serialized representation.
       properties:
         id:
           type: integer
@@ -917,6 +1325,13 @@ components:
       - username
     Meal:
       type: object
+      description: |-
+        Serializer for the Meal model.
+
+        Attributes:
+            Meta:
+                model (Meal): The model associated with the serializer.
+                fields (list): The fields to be included in the serialized representation ('__all__' for all fields).
       properties:
         id:
           type: integer
@@ -939,31 +1354,52 @@ components:
       - sales
     Order:
       type: object
+      description: |-
+        Serializer for the Order model.
+
+        Attributes:
+            meal_ordered (list): A serialized representation of meals associated with the order.
+            price (float): The total price of the order (read-only).
+
+            Methods:
+                get_meals(obj): Helper method to retrieve and serialize meals associated with the order.
+
+            Meta:
+                model (Order): The model associated with the serializer.
+                fields (list): The fields to be included in the serialized representation.
       properties:
-        id:
+        pk:
           type: integer
           readOnly: true
-        meal:
-          type: array
-          items:
-            $ref: '#/components/schemas/Meal'
+          title: ID
+        empID:
+          type: integer
         price:
           type: number
           format: double
           readOnly: true
         delFlag:
           type: boolean
+        meal_orderd:
+          type: array
+          items: {}
+          readOnly: true
         completed:
           type: boolean
-        empID:
-          type: integer
       required:
       - empID
-      - id
-      - meal
+      - meal_orderd
+      - pk
       - price
     PatchedDelivery:
       type: object
+      description: |-
+        Serializer for the Delivery model.
+
+        Attributes:
+            Meta:
+                model (Delivery): The model associated with the serializer.
+                fields (list): The fields to be included in the serialized representation ('name', 'address', 'orderID').
       properties:
         name:
           type: string
@@ -979,10 +1415,15 @@ components:
 
         Includes methods for retrieving and updating associated PhoneNumber instances.
         Attributes:
-        - phone_numbers as anested serilizer
+        - phone_numbers as a nested serilizer
         - number as a custom field for numbers
         - password as a write only field
         - and all other necessicy field in meta
+
+        Meta:
+            model (Employee): The model associated with the serializer.
+            fields (list): The fields to be included in the serialized representation ('pk','username','salary','position','number','email','password','address','phone_numbers').
+            read_only_fields (list): Fields that are read-only in the serialized representation ('pk')
       properties:
         pk:
           type: integer
@@ -1001,7 +1442,16 @@ components:
           type: string
           maxLength: 100
         number:
-          type: string
+          type: array
+          items: {}
+          description: |-
+            Retrieve and return the list of phone numbers objects associated with the Employee.
+
+            Args:
+                obj (Employee): The Employee instance for which phone numbers are to be retrieved.
+
+            Returns:
+                list: A list of phone numbers objects associated with the Employee.
           readOnly: true
         email:
           type: string
@@ -1020,6 +1470,13 @@ components:
             $ref: '#/components/schemas/PhoneNumberSerializer1'
     PatchedMeal:
       type: object
+      description: |-
+        Serializer for the Meal model.
+
+        Attributes:
+            Meta:
+                model (Meal): The model associated with the serializer.
+                fields (list): The fields to be included in the serialized representation ('__all__' for all fields).
       properties:
         id:
           type: integer
@@ -1036,26 +1493,47 @@ components:
           type: integer
     PatchedOrder:
       type: object
+      description: |-
+        Serializer for the Order model.
+
+        Attributes:
+            meal_ordered (list): A serialized representation of meals associated with the order.
+            price (float): The total price of the order (read-only).
+
+            Methods:
+                get_meals(obj): Helper method to retrieve and serialize meals associated with the order.
+
+            Meta:
+                model (Order): The model associated with the serializer.
+                fields (list): The fields to be included in the serialized representation.
       properties:
-        id:
+        pk:
           type: integer
           readOnly: true
-        meal:
-          type: array
-          items:
-            $ref: '#/components/schemas/Meal'
+          title: ID
+        empID:
+          type: integer
         price:
           type: number
           format: double
           readOnly: true
         delFlag:
           type: boolean
+        meal_orderd:
+          type: array
+          items: {}
+          readOnly: true
         completed:
           type: boolean
-        empID:
-          type: integer
     PatchedPhoneNumber:
       type: object
+      description: |-
+        Serializer for the PhoneNumber model.
+
+        Attributes:
+            Meta:
+                model (PhoneNumber): The model associated with the serializer.
+                fields (list): The fields to be included in the serialized representation ('__all__' for all fields).
       properties:
         id:
           type: integer
@@ -1066,6 +1544,13 @@ components:
           type: integer
     PhoneNumber:
       type: object
+      description: |-
+        Serializer for the PhoneNumber model.
+
+        Attributes:
+            Meta:
+                model (PhoneNumber): The model associated with the serializer.
+                fields (list): The fields to be included in the serialized representation ('__all__' for all fields).
       properties:
         id:
           type: integer
@@ -1083,6 +1568,9 @@ components:
         Serializer for the PhoneNumber model.
         Attributes:
         - empID as a nested serilizer
+            Meta:
+                model (PhoneNumber): The model associated with the serializer.
+                fields (list): The fields to be included in the serialized representation.
       properties:
         id:
           type: integer
@@ -1138,8 +1626,3 @@ components:
     basicAuth:
       type: http
       scheme: basic
-    tokenAuth:
-      type: apiKey
-      in: header
-      name: Authorization
-      description: Token-based authentication with required prefix "Token"

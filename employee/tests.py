@@ -91,9 +91,7 @@ class TestEmployeeViews:
         client.force_authenticate(employee)
         url = reverse('employee-detail', kwargs={'pk': employee.pk})
         data = {"address": "nablus"}
-        print("HI")
         response = client.patch(url, data, format='json')
-        print(response.data)
         assert response.status_code == status.HTTP_200_OK
         assert response.data['address'] == "nablus"
 
@@ -175,7 +173,6 @@ class TestEmployeePermissions:
         url = reverse('employee-detail', kwargs={'pk': employee2.pk})
         data = {"address": "nablus"}
         response = client.patch(url, data, format='json')
-        print(response.data)
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
     def test_delete_employee(self,normal_user):
@@ -194,11 +191,27 @@ class TestEmployeePermissions:
         response = client.delete(url)
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
+ 
 @pytest.mark.django_db
 class TestPhoneNumberViews:
     """
     Test cases for PhoneNumber views.
     """
+    def test_add_phone_number(self):
+        """
+        Test updating a PhoneNumber instance through the API.
+        """
+        client = APIClient()
+        employee = Employee.objects.create(name="Test Employee", salary=40000.0, position="Casher", address="456 Side St")
+        #phone_number = PhoneNumber.objects.create(empID=employee, PhoneNumber="1234567890")
+
+        url = reverse('phone-number-list')
+        data = {"PhoneNumber": 12151, "empID": employee.pk}
+
+        response = client.post(url, data, format='json')
+        assert response.status_code == status.HTTP_201_CREATED
+        
+
     def test_list_phone_numbers(self):
         """
         Test listing PhoneNumber instances through the API.
@@ -221,12 +234,13 @@ class TestPhoneNumberViews:
         client = APIClient()
         employee = Employee.objects.create(name="Test Employee", salary=40000.0, position="Casher", address="456 Side St")
         phone_number = PhoneNumber.objects.create(empID=employee, PhoneNumber="1234567890")
+
         url = reverse('phone-number-detail', kwargs={'pk': phone_number.pk})
-        data = {"PhoneNumber": "9876543210"}
+        data = {"PhoneNumber": 12151}
 
         response = client.patch(url, data, format='json')
         assert response.status_code == status.HTTP_200_OK
-        assert response.data['PhoneNumber'] == 9876543210
+        assert response.data['PhoneNumber'] == 12151
 
     def test_delete_phone_number(self):
         """
@@ -238,9 +252,7 @@ class TestPhoneNumberViews:
         url = reverse('phone-number-detail', kwargs={'pk': phone_number.pk})
         url12 = reverse('phone-number-list')
         response12 = client.get(url12)
-        print(response12.data)
         response = client.delete(url)
-        print(response)
         assert response.status_code == status.HTTP_204_NO_CONTENT
         assert not PhoneNumber.objects.filter(pk=phone_number.pk).exists()
 

@@ -36,7 +36,9 @@ def test_order_str(create_test_data):
         None
     """
     order = create_test_data['order']
-    assert order.pk == 1
+    emp = create_test_data['employee']
+    assert order.empID == emp
+    assert order.price == 35.97
  
 @pytest.mark.django_db
 def test_delivery_str(create_test_data):
@@ -50,7 +52,9 @@ def test_delivery_str(create_test_data):
         None
     """
     delivery = create_test_data['delivery']
-    assert delivery.pk == 1
+    order = create_test_data['order']
+    assert delivery.orderID == order
+    assert delivery.name == 'John Doe'
 
 
 #view test
@@ -135,8 +139,6 @@ def test_update_meal(admin_user, create_test_data):
 
     # Update the meal
     response = client.patch(url, data=updated_data)
-    print("NEXT LVL")
-    print(response.data)
     assert response.status_code == status.HTTP_200_OK
 
     url = reverse('meal-detail', kwargs={'pk': meal_id})
@@ -339,7 +341,6 @@ class TestDeliveryViewSet:
 
         url = reverse('delivery-list')
         response = client.post(url, data, format='json')
-        print(response.status_code)
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
     def test_create_delivery_delivery_flag_false(self, del_order):

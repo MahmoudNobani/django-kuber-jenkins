@@ -19,9 +19,7 @@ pipeline {
         }
         stage('Testing server') {
             steps {
-                withCredentials([kubeconfigContent(credentialsId: 'kube-cred')]) {
-                    sh '''kubectl get deploy'''
-                }
+
                 echo "Testing.. "
                 sh 'kubectl get pods --context=minikube'
             }

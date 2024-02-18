@@ -9,6 +9,7 @@ pipeline {
                         sudo usermod -aG docker $USER
                         curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
                         sudo install minikube-linux-amd64 /usr/local/bin/minikube
+                        sudo chown -R $USER ~/.minikube
                         minikube start '''
                 }
             }

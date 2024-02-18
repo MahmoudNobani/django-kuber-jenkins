@@ -6,7 +6,7 @@ pipeline {
             steps {
                 script {
                     sh '''
-                        sudo install conntrack
+                        sudo yum install conntrack
                         echo $USER
                         sudo usermod -aG docker $USER
                         curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64

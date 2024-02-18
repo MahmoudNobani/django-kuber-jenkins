@@ -19,16 +19,9 @@ pipeline {
         }
         stage('Testing server') {
             steps {
-
-                echo "Testing.. "
-                sh '''curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl
-                sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-                chmod +x kubectl
-                mkdir -p ~/.local/bin
-                mv ./kubectl ~/.local/bin/kubectl
-                kubectl version --client
-                '''
-            }
+                withKubeConfig([credentialsId: 'user1', serverUrl: 'http://192.168.49.2:32171/']) {
+                sh 'kubectl exec -it deploy/django-app -- pytest meal/tests.py employee/tests.py'
+                }
         }
     }
 }

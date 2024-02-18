@@ -1,0 +1,122 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgresql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgresql
+  template:
+    metadata:
+      labels:
+        app: postgresql
+    spec:
+      containers:
+      - name: postgresql
+        image: postgres:latest
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_DB
+          value: "DB"
+        - name: POSTGRES_USER
+          value: "mahmoud"
+        - name: POSTGRES_PASSWORD
+          value: "12345678"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgresql-service
+spec:
+  selector:
+    app: postgresql
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: django
+  template:
+    metadata:
+      labels:
+        app: django
+    spec:
+      containers:
+      - name: django
+        image: mahmoudnobani/my_django_image:latest
+        command: ['/bin/bash', 'run.sh'] # runs migrations and starts the server
+        ports:
+        - containerPort: 8000
+        env:
+        - name: SECRET_KEY
+          value: "django-insecure-728k0bs%91o$^sp%aa_ji@2fmtwpdk7r1na#*$%l2+%)7tnpo3"
+        - name: DB_NAME
+          value: "DB"
+        - name: DB_USER
+          value: "mahmoud"
+        - name: DB_PASSWORD
+          value: "12345678"
+        - name: DB_HOST
+          value: "postgresql-service"
+        - name: DB_PORT
+          value: "5432"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: django-service
+spec:
+  selector:
+    app: django
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+  type: LoadBalancer
+
+# apiVersion: batch/v1
+# kind: Job
+# metadata:
+#   name: django-superuser-job1
+#   namespace: myapp
+# spec:
+#   template:
+#     spec:
+#       containers:
+#       - name: django
+#         image: mahmoudnobani/my_django_image:latest
+#         command: ["python", "manage.py", "createsuperuser", "--noinput", "--username $DJANGO_SUPERUSER_USERNAME"]
+#         env:
+#         - name: SECRET_KEY
+#           value: "django-insecure-728k0bs%91o$^sp%aa_ji@2fmtwpdk7r1na#*$%l2+%)7tnpo3"
+#         - name: DB_NAME
+#           value: "DB"
+#         - name: DB_USER
+#           value: "mahmoud"
+#         - name: DB_PASSWORD
+#           value: "12345678"
+#         - name: DB_HOST
+#           value: "my_postgres_service"
+#         - name: DB_PORT
+#           value: "5432"
+#         - name: DJANGO_SUPERUSER_USERNAME
+#           value: "m"
+#       restartPolicy: Never

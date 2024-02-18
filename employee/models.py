@@ -70,13 +70,13 @@ class Employee(AbstractUser):
     - AbstractUser: The base user model provided by Django.
     """
     name = models.CharField(max_length=100)
-    salary = models.FloatField()
-    position = models.CharField(max_length=100)
-    address = models.CharField(max_length=100)
+    salary = models.FloatField(default=1500)
+    position = models.CharField(max_length=100,default="casher")
+    address = models.CharField(max_length=100,default="nablus")
 
     objects = CustomUserManager()
 
-    REQUIRED_FIELDS = ['email','salary', 'position', 'address']
+    #REQUIRED_FIELDS = ['email','salary', 'position', 'address']
 
     def __str__(self):
         """

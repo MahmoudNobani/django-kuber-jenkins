@@ -5,7 +5,9 @@ pipeline {
         stage("minikube") {
             steps {
                 script {
-                    sh '''curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+                    sh '''echo $USER
+                        sudo usermod -aG docker $USER
+                        curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
                         sudo install minikube-linux-amd64 /usr/local/bin/minikube
                         minikube start'''
                 }

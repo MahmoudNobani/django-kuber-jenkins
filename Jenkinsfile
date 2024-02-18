@@ -5,7 +5,7 @@ pipeline {
         stage("minikube") {
             steps {
                 script {
-                    sh '''sudo minikube delete
+                    sh '''
                         echo $USER
                         sudo usermod -aG docker $USER
                         curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64

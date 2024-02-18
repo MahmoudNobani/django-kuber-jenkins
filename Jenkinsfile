@@ -6,9 +6,9 @@ pipeline {
             steps {
                 script {
                     sh '''
-                        sh 'sudo yum install -y yum-utils'
-                        sh 'sudo yum-config-manager --add-repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/CentOS_7/devel:kubic:libcontainers:stable.repo'
-                        sh 'sudo yum install -y cri-tools'
+                        wget https://github.com/kubernetes-sigs/cri-tools/releases/download/v1.26.0/crictl-v1.26.0-linux-amd64.tar.gz
+                        sudo tar zxvf crictl-v1.26.0-linux-amd64.tar.gz -C /usr/local/bin
+                        crictl --version
                         sudo yum -y install conntrack
                         echo $USER
                         sudo usermod -aG docker $USER

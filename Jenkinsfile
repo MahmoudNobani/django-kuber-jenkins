@@ -13,7 +13,7 @@ pipeline {
         stage('Deploy App') {
             steps {
                 script {
-                    sh 'kubectl apply -f manifist.yaml'
+                    sh 'sudo kubectl apply -f manifist.yaml'
                 }
             }
         }

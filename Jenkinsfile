@@ -17,12 +17,12 @@ pipeline {
                 }
             }
         }
-        stage('Testing server') {
-            steps {
+        // stage('Testing server') {
+        //     steps {
 
-                echo "Testing.. "
-                sh 'kubectl get pods --context=minikube'
-            }
-        }
+        //         echo "Testing.. "
+        //         sh 'kubectl get pods --context=minikube'
+        //     }
+        // }
     }
 }

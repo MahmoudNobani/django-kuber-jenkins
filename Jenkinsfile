@@ -19,7 +19,7 @@ pipeline {
         }
         stage('Testing server') {
             steps {
-                withKubeConfig([credentialsId: 'user1', serverUrl: 'http://192.168.49.2:32171/']) {
+                withKubeConfig([credentialsId: 'kube-cred', serverUrl: 'http://192.168.49.2:32171/']) {
                 sh 'kubectl exec -it deploy/django-app -- pytest meal/tests.py employee/tests.py'
                 }
         }

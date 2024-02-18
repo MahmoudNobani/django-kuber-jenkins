@@ -20,7 +20,7 @@ pipeline {
         }
         stage('Testing server') {
             steps {
-                withKubeConfig([credentialsId: 'config']) {
+                withKubeConfig([credentialsId: 'myKubeConfig']) {
                     sh 'kubectl exec -it deploy/django-app -- pytest meal/tests.py employee/tests.py'
                 }
             }

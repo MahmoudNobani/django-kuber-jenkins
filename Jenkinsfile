@@ -5,7 +5,7 @@ pipeline {
         stage('Deploy App') {
             steps {
                 script {
-                    kubernetesDeploy(configFile: "manifest.yaml", kubeconfigId: "minikube")
+                    sh 'kubectl apply -f manifist.yaml'
                 }
             }
         }

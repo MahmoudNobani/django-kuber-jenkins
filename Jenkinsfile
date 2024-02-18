@@ -13,7 +13,7 @@ pipeline {
         stage('Deploy App') {
             steps {
                 script {
-                    kubernetesDeploy(configs: "manifist.yml", kubeconfigId: "kube-cred")
+                    kubernetesDeploy(configs: "manifist.yaml", kubeconfigId: "kube-cred")
                 }
             }
         }

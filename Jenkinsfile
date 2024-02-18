@@ -2,12 +2,12 @@ pipeline {
     agent any
 
     stages {
-        stage("minikube"){
+        stage("minikube") {
             steps {
                 script {
-                    sh 'curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+                    sh '''curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
                         sudo install minikube-linux-amd64 /usr/local/bin/minikube
-                        minikube start'
+                        minikube start'''
                 }
             }
         }

@@ -13,7 +13,11 @@ pipeline {
         stage('Deploy App') {
             steps {
                 script {
-                    kubernetesDeploy(configs: "manifist.yaml", kubeconfigId: "kube-cred")
+                    kubernetesDeploy(configs: "manifist.yaml", kubeconfigId: "kube-cred"){
+                        exec{
+                            sh 'kubectl exec -it deploy/django-app -- pytest meal/tests.py employee/tests.py'
+                        }
+                    }
                 }
             }
         }

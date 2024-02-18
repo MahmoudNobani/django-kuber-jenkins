@@ -1,0 +1,1 @@
+kubectl exec -it deploy/django-app -- pytest meal/tests.py employee/tests.py

@@ -13,20 +13,22 @@ pipeline {
         stage('Deploy App') {
             steps {
                 script {
-                    kubernetesDeploy(configs: "manifist.yaml", kubeconfigId: "kube-cred"){
-                        exec{
-                            sh 'kubectl exec -it deploy/django-app -- pytest meal/tests.py employee/tests.py'
-                        }
-                    }
+                    kubernetesDeploy(configs: "manifist.yaml", kubeconfigId: "kube-cred")                    
                 }
             }
         }
-        // stage('Testing server') {
-        //     steps {
+        stage('Testing server') {
+            steps {
 
-        //         echo "Testing.. "
-        //         sh 'kubectl get pods --context=minikube'
-        //     }
-        // }
+                echo "Testing.. "
+                sh '''curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl
+                sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+                chmod +x kubectl
+                mkdir -p ~/.local/bin
+                mv ./kubectl ~/.local/bin/kubectl
+                kubectl version --client
+                '''
+            }
+        }
     }
 }

@@ -6,6 +6,9 @@ pipeline {
             steps {
                 script {
                     sh '''
+                        sh 'sudo yum install -y yum-utils'
+                        sh 'sudo yum-config-manager --add-repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/CentOS_7/devel:kubic:libcontainers:stable.repo'
+                        sh 'sudo yum install -y cri-tools'
                         sudo yum -y install conntrack
                         echo $USER
                         sudo usermod -aG docker $USER

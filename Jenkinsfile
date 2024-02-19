@@ -6,22 +6,25 @@ pipeline {
         }
         
     stages {
-        stage("building images") {
-            steps {
-                script {
-                    sh '''
-                        docker build -t mahmoudnobani/my_django_image .
-                    '''
-                }
-            }
-        }
+        // stage("building images") {
+        //     steps {
+        //         script {
+        //             sh '''
+        //                 docker build -t mahmoudnobani/my_django_image .
+        //             '''
+        //         }
+        //     }
+        // }
         stage("push image") {
             steps {
-                script {
-                    sh '''
-                        docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW 
-		                docker push mahmoudnobani/my_django_image
-                    '''
+                // script {
+                //     sh '''
+                //         docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW 
+		        //         docker push mahmoudnobani/my_django_image
+                //     '''
+                // }
+                docker.withRegistry('https://hub.docker.com/repository/docker/mahmoudnobani/my_django_image/general', 'docker-credentials') {
+                    docker.build('mahmoudnobani/my_django_image').push('latest')
                 }
             }
         }

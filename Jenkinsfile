@@ -1,12 +1,26 @@
 pipeline {
     agent any
 
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('docker-credentials')
+        }
+        
     stages {
-        stage("Minikube") {
+        stage("building images") {
             steps {
                 script {
                     sh '''
-                        docker ps
+                        docker build -t mahmoudnobani/my_django_image .
+                    '''
+                }
+            }
+        }
+        stage("push image") {
+            steps {
+                script {
+                    sh '''
+                        docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW 
+		                docker push mahmoudnobani/apache_server
                     '''
                 }
             }

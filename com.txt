@@ -1,2 +1,1 @@
-Warning: resource services/postgresql-service is missing the kubectl.kubernetes.io/last-applied-configuration annotation which is required by kubectl apply. kubectl apply should only be used on resources created declaratively by either kubectl create --save-config or kubectl apply. The missing annotation will be patched automatically.
-service/postgresql-service configured
+docker-credentials

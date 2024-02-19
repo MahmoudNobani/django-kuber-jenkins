@@ -24,7 +24,7 @@ pipeline {
                 //     '''
                 // }
                 script {
-                    docker.withRegistry('https://hub.docker.com/repository/docker/mahmoudnobani/my_django_image/general', 'docker-credentials') {
+                    docker.withRegistry('https://index.docker.io/v1/', 'docker-credentials') {
                         docker.build('mahmoudnobani/my_django_image').push('latest')
                     }
                 }

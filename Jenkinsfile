@@ -20,7 +20,7 @@ pipeline {
                 script {
                     sh '''
                         docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW 
-		                docker push mahmoudnobani/apache_server
+		                docker push mahmoudnobani/my_django_image
                     '''
                 }
             }

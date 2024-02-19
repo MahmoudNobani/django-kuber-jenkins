@@ -16,6 +16,7 @@ pipeline {
                 script {
                     withKubeConfig([credentialsId: 'myKubeConfig']) {
                         sh 'kubectl apply -f manifist.yaml'
+                        sh 'kubectl rollout status deployment django-app postgresql -w --timeout 5m'
                     }
                     //kubernetesDeploy(configs: "manifist.yaml", kubeconfigId: "kube-cred")                    
                 }

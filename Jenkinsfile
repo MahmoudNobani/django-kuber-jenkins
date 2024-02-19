@@ -14,7 +14,10 @@ pipeline {
         stage('Deploy App') {
             steps {
                 script {
-                    kubernetesDeploy(configs: "manifist.yaml", kubeconfigId: "kube-cred")                    
+                    withKubeConfig([credentialsId: 'myKubeConfig']) {
+                        sh 'kubectl apply -f manifist.yaml'
+                    }
+                    //kubernetesDeploy(configs: "manifist.yaml", kubeconfigId: "kube-cred")                    
                 }
             }
         }

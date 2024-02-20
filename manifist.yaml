@@ -7,7 +7,6 @@ data:
   POSTGRES_DB: "REIK"
   POSTGRES_USER: "bWFobW91ZAo="
   POSTGRES_PASSWORD: "12345678"
-
 ---
 
 apiVersion: v1
@@ -18,7 +17,6 @@ data:
   DB_HOST: "postgresql-service"
   DB_PORT: "5432"
   DB_PASSWORD: "12345678"
-
 ---
 
 apiVersion: v1
@@ -31,7 +29,6 @@ data:
   DB_NAME: "REIK"
   DB_USER: "bWFobW91ZAo="
   DB_PASSWORD: "12345678"
-  
 ---
 
 apiVersion: v1
@@ -45,7 +42,6 @@ spec:
     - ReadWriteOnce
   hostPath:
     path: /home/arima/Desktop/pv
-
 ---
 
 apiVersion: v1
@@ -58,7 +54,6 @@ spec:
   resources:
     requests:
       storage: 1Gi
-
 ---
 
 apiVersion: apps/v1
@@ -90,8 +85,6 @@ spec:
       - name: postgres-storage
         persistentVolumeClaim:
           claimName: postgres-pvc
-
-
 ---
 
 apiVersion: v1
@@ -105,7 +98,6 @@ spec:
     - protocol: TCP
       port: 5432
       targetPort: 5432
-
 ---
 
 apiVersion: apps/v1
@@ -133,7 +125,6 @@ spec:
             name: django-secret
         - configMapRef:
             name: postgres-config
-
 ---
 
 apiVersion: v1

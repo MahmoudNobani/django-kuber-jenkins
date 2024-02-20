@@ -81,6 +81,10 @@ spec:
         volumeMounts:
         - name: postgres-storage
           mountPath: /var/lib/postgresql/data
+        resources:
+          limits:
+            cpu: "0.5"
+            memory: "1Gi"
       volumes:
       - name: postgres-storage
         persistentVolumeClaim:
@@ -125,6 +129,10 @@ spec:
             name: django-secret
         - configMapRef:
             name: postgres-config
+        resources:
+          limits:
+            cpu: "0.5"
+            memory: "1Gi"
 ---
 
 apiVersion: v1

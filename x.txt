@@ -1,0 +1,43 @@
+|-----------------------------|----------|--------------|--------------------------------|-----------------------------------------------------------------------------------|
+|         ADDON NAME          | PROFILE  |    STATUS    |           MAINTAINER           |                                       DOCS                                        |
+|-----------------------------|----------|--------------|--------------------------------|-----------------------------------------------------------------------------------|
+| ambassador                  | minikube | disabled     | 3rd party (Ambassador)         | https://minikube.sigs.k8s.io/docs/tutorials/ambassador_ingress_controller/        |
+| auto-pause                  | minikube | disabled     | minikube                       | n/a                                                                               |
+| cloud-spanner               | minikube | disabled     | Google                         | https://minikube.sigs.k8s.io/docs/handbook/addons/cloud-spanner/                  |
+| csi-hostpath-driver         | minikube | disabled     | Kubernetes                     | https://minikube.sigs.k8s.io/docs/tutorials/volume_snapshots_and_csi/             |
+| dashboard                   | minikube | enabled ✅   | Kubernetes                     | https://minikube.sigs.k8s.io/docs/handbook/dashboard/                             |
+| default-storageclass        | minikube | enabled ✅   | Kubernetes                     | https://minikube.sigs.k8s.io/docs/handbook/persistent_volumes/                    |
+| efk                         | minikube | disabled     | 3rd party (Elastic)            | n/a                                                                               |
+| freshpod                    | minikube | disabled     | Google                         | https://github.com/GoogleCloudPlatform/freshpod                                   |
+| gcp-auth                    | minikube | disabled     | Google                         | https://minikube.sigs.k8s.io/docs/handbook/addons/gcp-auth/                       |
+| gvisor                      | minikube | disabled     | minikube                       | https://github.com/kubernetes/minikube/blob/master/deploy/addons/gvisor/README.md |
+| headlamp                    | minikube | disabled     | 3rd party (kinvolk.io)         | https://minikube.sigs.k8s.io/docs/handbook/addons/headlamp/                       |
+| helm-tiller                 | minikube | disabled     | 3rd party (Helm)               | https://v2.helm.sh/docs/using_helm/                                               |
+| inaccel                     | minikube | disabled     | 3rd party (InAccel             | n/a                                                                               |
+|                             |          |              | [info@inaccel.com])            |                                                                                   |
+| ingress                     | minikube | disabled     | Kubernetes                     | https://kubernetes.io/docs/tasks/access-application-cluster/ingress-minikube/     |
+| ingress-dns                 | minikube | disabled     | minikube                       | https://minikube.sigs.k8s.io/docs/handbook/addons/ingress-dns/                    |
+| inspektor-gadget            | minikube | disabled     | 3rd party                      | https://minikube.sigs.k8s.io/docs/handbook/addons/inspektor-gadget/               |
+|                             |          |              | (inspektor-gadget.io)          |                                                                                   |
+| istio                       | minikube | disabled     | 3rd party (Istio)              | https://istio.io/latest/docs/setup/platform-setup/minikube/                       |
+| istio-provisioner           | minikube | disabled     | 3rd party (Istio)              | https://istio.io/latest/docs/setup/platform-setup/minikube/                       |
+| kong                        | minikube | disabled     | 3rd party (Kong HQ)            | https://minikube.sigs.k8s.io/docs/handbook/addons/kong-ingress/                   |
+| kubeflow                    | minikube | disabled     | 3rd party                      | n/a                                                                               |
+| kubevirt                    | minikube | disabled     | 3rd party (KubeVirt)           | https://minikube.sigs.k8s.io/docs/tutorials/kubevirt/                             |
+| logviewer                   | minikube | disabled     | 3rd party (unknown)            | n/a                                                                               |
+| metallb                     | minikube | disabled     | 3rd party (MetalLB)            | n/a                                                                               |
+| metrics-server              | minikube | enabled ✅   | Kubernetes                     | n/a                                                                               |
+| nvidia-device-plugin        | minikube | disabled     | 3rd party (NVIDIA)             | n/a                                                                               |
+| nvidia-driver-installer     | minikube | disabled     | 3rd party (Nvidia)             | https://minikube.sigs.k8s.io/docs/tutorials/nvidia_gpu/                           |
+| nvidia-gpu-device-plugin    | minikube | disabled     | 3rd party (Nvidia)             | https://minikube.sigs.k8s.io/docs/tutorials/nvidia_gpu/                           |
+| olm                         | minikube | disabled     | 3rd party (Operator Framework) | n/a                                                                               |
+| pod-security-policy         | minikube | disabled     | 3rd party (unknown)            | n/a                                                                               |
+| portainer                   | minikube | disabled     | 3rd party (Portainer.io)       | n/a                                                                               |
+| registry                    | minikube | disabled     | minikube                       | n/a                                                                               |
+| registry-aliases            | minikube | disabled     | 3rd party (unknown)            | n/a                                                                               |
+| registry-creds              | minikube | disabled     | 3rd party (UPMC Enterprises)   | https://minikube.sigs.k8s.io/docs/handbook/registry/                              |
+| storage-provisioner         | minikube | enabled ✅   | minikube                       | n/a                                                                               |
+| storage-provisioner-gluster | minikube | disabled     | 3rd party (Gluster)            | n/a                                                                               |
+| storage-provisioner-rancher | minikube | disabled     | 3rd party (Rancher)            | n/a                                                                               |
+| volumesnapshots             | minikube | disabled     | Kubernetes                     | https://minikube.sigs.k8s.io/docs/tutorials/volume_snapshots_and_csi/             |
+|-----------------------------|----------|--------------|--------------------------------|-----------------------------------------------------------------------------------|

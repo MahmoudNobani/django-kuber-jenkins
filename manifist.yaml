@@ -1,3 +1,54 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: postgres-secret
+type: Opaque
+data:
+  POSTGRES_DB: "REIK"
+  POSTGRES_USER: "bWFobW91ZAo="
+  POSTGRES_PASSWORD: "MTIzNDU2NzgK"
+
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: django-secret
+type: Opaque
+data:
+  SECRET_KEY: "ZGphbmdvLWluc2VjdXJlLTcyOGswYnMlOTFvJF5zcCVhYV9qaUAyZm10d3BkazdyMW5hIyokJWwyKyUpN3RucG8zCg=="
+  DB_NAME: "REIK"
+  DB_USER: "bWFobW91ZAo="
+  DB_PASSWORD: "MTIzNDU2NzgK"
+  DB_HOST: "cG9zdGdyZXNxbC1zZXJ2aWNlCg=="
+  DB_PORT: "NTQzMgo="
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: postgres-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /home/arima/Desktop/pv
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
 ---
 
 apiVersion: apps/v1
@@ -19,13 +70,17 @@ spec:
         image: postgres:latest
         ports:
         - containerPort: 5432
-        env:
-        - name: POSTGRES_DB
-          value: "DB"
-        - name: POSTGRES_USER
-          value: "mahmoud"
-        - name: POSTGRES_PASSWORD
-          value: "12345678"
+        envFrom:
+        - secretRef:
+            name: postgres-secret
+        volumeMounts:
+        - name: postgres-storage
+          mountPath: /var/lib/postgresql/data
+      volumes:
+      - name: postgres-storage
+        persistentVolumeClaim:
+          claimName: postgres-pvc
+
 
 ---
 
@@ -63,19 +118,9 @@ spec:
         command: ['/bin/bash', 'run.sh'] # runs migrations and starts the server
         ports:
         - containerPort: 8000
-        env:
-        - name: SECRET_KEY
-          value: "django-insecure-728k0bs%91o$^sp%aa_ji@2fmtwpdk7r1na#*$%l2+%)7tnpo3"
-        - name: DB_NAME
-          value: "DB"
-        - name: DB_USER
-          value: "mahmoud"
-        - name: DB_PASSWORD
-          value: "12345678"
-        - name: DB_HOST
-          value: "postgresql-service"
-        - name: DB_PORT
-          value: "5432"
+        envFrom:
+        - secretRef:
+            name: django-secret
 
 ---
 

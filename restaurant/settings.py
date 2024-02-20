@@ -111,12 +111,6 @@ WSGI_APPLICATION = 'restaurant.wsgi.application'
 #     }
 # }
 
-print(env("DB_NAME"))
-print(env("DB_USER"))
-print(env("DB_PASSWORD"))
-print(env("DB_HOST"))
-print(env("DB_PORT"))
-
 DATABASES = {
 
     'default': {

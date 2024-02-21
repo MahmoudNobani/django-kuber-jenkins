@@ -122,20 +122,21 @@ class OrderViewSet(viewsets.ModelViewSet):
                 sum += meal_temp.price
             except:
                 return Response("invalid Meal ID", status=status.HTTP_404_NOT_FOUND)
+            
+        meal_obj_counter = Counter(meal_obj)
                
-        for i in meal_obj:
+        for i in meal_obj_counter.keys():
             try: 
-                if i.capacity > 0:
-                    i.capacity-=1
-                if i.capacity <= 0:
+                if i.capacity-meal_obj_counter[i] > 0:
+                    i.capacity-=meal_obj_counter[i]
+                if i.capacity-meal_obj_counter[i] <= 0:
                     raise ValueError("Meal is not available atm, please order something else")
-                i.sales+=1
-                i.save()
+                i.sales+=meal_obj_counter[i]
             except ValueError as e:
-                return Response(str(e), status=status.HTTP_404_NOT_FOUND)    
-        for i in meal_obj:
-            i.save()           
+                return Response(str(e), status=status.HTTP_404_NOT_FOUND)  
 
+        for i in meal_obj:
+            i.save()             
 
 
         ord_obj = Order(empID= emp,
@@ -169,12 +170,15 @@ class OrderViewSet(viewsets.ModelViewSet):
         """
         order_obj = Order.objects.get(pk=pk)
         meals_ids = order_obj.meal.through.objects.filter(order_id=pk)
+            
         if order_obj.completed == False:
             for i in meals_ids:
                 meal_obj = Meal.objects.get(pk=i.meal.pk)
-                meal_obj.capacity+=1
-                if meal_obj.sales > 0:
-                    meal_obj.sales-=1
+                meal_obj.capacity+=i.quantity
+                if meal_obj.sales-i.quantity > 0:
+                    meal_obj.sales-=i.quantity
+                else:
+                    meal_obj.sales=0
                 meal_obj.save()
         
         order_obj.delete()

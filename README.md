@@ -9,7 +9,7 @@ The database we will support are as specified in the ER-diagram here:
 ---
 views are documented in docstrings in files views.py
 
-
+the code was also built as a docker image and deployed on minikube using kuberenetes with 2 microservices (django app and a postgresql db), then a CI-CD pipline was made to automate the whole process using jenkins
 
 
 python manage.py spectacular --file schema.yml

@@ -130,6 +130,7 @@ class OrderViewSet(viewsets.ModelViewSet):
                 if i.capacity <= 0:
                     raise ValueError("Meal is not available atm, please order something else")
                 i.sales+=1
+                i.save()
             except ValueError as e:
                 return Response(str(e), status=status.HTTP_404_NOT_FOUND)    
         for i in meal_obj:

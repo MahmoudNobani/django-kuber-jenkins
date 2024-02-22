@@ -3,7 +3,6 @@ pipeline {
     environment {
         DOCKERHUB_CREDENTIALS = credentials('docker-credentials')
         }
-        
     stages {
         // stage("building images") {
         //     steps {

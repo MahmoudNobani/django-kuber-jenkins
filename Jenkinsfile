@@ -4,28 +4,31 @@ pipeline {
         DOCKERHUB_CREDENTIALS = credentials('docker-credentials')
         }
     stages {
-        // stage("building images") {
-        //     steps {
-        //         script {
-        //             sh '''
-        //                 docker build -t mahmoudnobani/my_django_image .
-        //             '''
-        //         }
-        //     }
-        // }
+        stage("building images") {
+            steps {
+                script {
+                    sh '''
+                        docker build -t mahmoudnobani/my_django_image .
+                    '''
+                    // docker.withRegistry('https://index.docker.io/v1/', 'docker-credentials') {
+                    //     docker.build('mahmoudnobani/my_django_image')
+                    // }
+                }
+            }
+        }
         stage("push image") {
             steps {
-                // script {
-                //     sh '''
-                //         docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW 
-		        //         docker push mahmoudnobani/my_django_image
-                //     '''
-                // }
                 script {
-                    docker.withRegistry('https://index.docker.io/v1/', 'docker-credentials') {
-                        docker.build('mahmoudnobani/my_django_image').push('latest')
-                    }
+                    sh '''
+                        docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW 
+		                docker push mahmoudnobani/my_django_image
+                    '''
                 }
+                // script {
+                //     docker.withRegistry('https://index.docker.io/v1/', 'docker-credentials') {
+                //         docker.build('mahmoudnobani/my_django_image').push('latest')
+                //     }
+                // }
             }
         }
         stage('Deploy App') {

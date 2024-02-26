@@ -2,4 +2,4 @@ docker.withRegistry('https://hub.docker.com/repository/docker/mahmoudnobani/my_d
   docker.build('myapp').push('latest')
 }
 
-
+https://github.com/MahmoudNobani/django-kuber-jenkins

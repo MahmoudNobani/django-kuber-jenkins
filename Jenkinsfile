@@ -34,7 +34,7 @@ pipeline {
         stage('Deploy App') {
             steps {
                 script {
-                    withKubeConfig([credentialsId: 'kCred']) {
+                    withKubeConfig([credentialsId: 'myKubeConfig']) {
                         sh 'kubectl apply -f manifist.yaml'
                         sh 'kubectl rollout status deployment django-app postgresql -w --timeout 5m'
                     }
